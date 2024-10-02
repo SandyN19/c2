@@ -3,23 +3,31 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>C2 project</title>
+    <title>C2 Project</title>
     <link rel="stylesheet" type="text/css" href="style.css" />
-
   </head>
   <body>
     <h1>Welcome!</h1>
-    <button id="greetBtn">Start</button>
-    <p id="locationInfo">Loading location...</p>
+    <button id="connectBtn">Connect to server</button>
     <p id="osInfo"></p>
 
-    <!-- Load external script -->
     <script>
-      window.onload = function() {
-        import('./src/c2.js').then(module => {
-          module.displayLocation();
-        });
-      };
+      // This part runs in the browser context (NW.js allows Node.js features too)
+
+      // Attach event listener to the button
+      document.getElementById('connectBtn').addEventListener('click', async function() {
+        try {
+          // Use axios to call the server-side endpoint
+          const response = await axios.post('http://localhost:1337/connect');
+          
+          // Update the DOM
+          document.getElementById('osInfo').innerText = "Connected successfully!";
+        } catch (error) {
+          console.error("Error connecting to server:", error);
+          document.getElementById('osInfo').innerText = `Error: ${error.message}`;
+        }
+      });
     </script>
+    <script src="./src/c2.js"></script>
   </body>
 </html>

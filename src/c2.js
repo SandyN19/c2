@@ -81,38 +81,9 @@ async function displayLocation() {
   document.getElementById('locationInfo').innerText = `Location: ${location}`;
 }
 
-
-        /* BUTTON */
-
-document.getElementById('greetBtn').addEventListener('click', async function() {
-  const clientInfo = await getClientInfo();
-
-  const uptimeInSeconds = clientInfo.uptime;
-  const uptimeHours = Math.floor(uptimeInSeconds / 3600);
-  const uptimeMinutes = Math.floor((uptimeInSeconds % 3600) / 60);
-  const uptimeSeconds = (uptimeInSeconds % 60).toFixed(2);
-
-  document.getElementById('osInfo').innerText =
-   `Id: ${clientInfo.id}, 
-   Platform: ${clientInfo.platform}, 
-   Version: ${clientInfo.release}, 
-   Uptime: ${uptimeHours}h ${uptimeMinutes}m ${uptimeSeconds}s`
-  await saveClientInfoToCSV();
-  const button = document.getElementById('greetBtn');
-  button.disabled = true;
-});
-
-
-
-
-
 /* EXPORTS */
-export { 
-  displayLocation
+module.exports = { 
+  displayLocation,
+  getClientInfo,
+  saveClientInfoToCSV
 };
-
-module.exports = {
-  displayLocation: displayLocation,
-  getClientInfo: getClientInfo,
-  saveClientInfoToCSV: saveClientInfoToCSV
-}

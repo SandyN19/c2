@@ -20,7 +20,7 @@
   "devDependencies": {
     "nw": "^0.91.0"
   },
-  "node-remote": "file://*",
+  "node-remote": "http://*",
   "chromium-args": "--mixed-context",
   "dependencies": {
     "axios": "^1.7.7",
