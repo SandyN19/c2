@@ -1,0 +1,2 @@
+node_modules/nw/nwjs-v0.91.0-linux-x64.tar.gz filter=lfs diff=lfs merge=lfs -text
+node_modules/nw/nwjs-v0.91.0-linux-x64/lib/libnw.so filter=lfs diff=lfs merge=lfs -text

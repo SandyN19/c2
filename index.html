@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C2 project</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+
+  </head>
+  <body>
+    <h1>Welcome!</h1>
+    <button id="greetBtn">Start</button>
+    <p id="locationInfo">Loading location...</p>
+    <p id="osInfo"></p>
+
+    <!-- Load external script -->
+    <script>
+      window.onload = function() {
+        import('./src/c2.js').then(module => {
+          module.displayLocation();
+        });
+      };
+    </script>
+  </body>
+</html>

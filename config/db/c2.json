@@ -1,0 +1,6 @@
+{
+    "host":     "sandy.local",
+    "user":     "dbadm",
+    "password": "P@ssw0rd",
+    "database": "c2"
+}
