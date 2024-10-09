@@ -8,6 +8,7 @@ let db;
 module.exports = {
     displayList: displayList,
     changeWatchlist: changeWatchlist,
+    updateClientData: updateClientData,
     
 };
 
@@ -43,5 +44,25 @@ async function changeWatchlist(arg1, arg2) {
     res = await db.query(sql,[arg1, arg2]);
 
     console.log('Watchlist has been updated.');
+    return res[0];
+}
+async function updateClientData(clientInfo) {
+    const { clientid, platform, release, uptime, location } = clientInfo;  // Ensure clientid matches
+
+    let sql = `
+    INSERT INTO client (clientid, name, version, uptime, location)
+    VALUES (?, ?, ?, ?, ?)
+    ON DUPLICATE KEY UPDATE
+      name = VALUES(name),
+      version = VALUES(version),
+      uptime = VALUES(uptime),
+      location = VALUES(location)
+    `; 
+    let res;
+
+    // Execute the query
+    res = await db.query(sql, [clientid, platform, release, uptime, location]);
+
+    console.log('Client data has been updated');
     return res[0];
 }

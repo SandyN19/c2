@@ -4,6 +4,7 @@
   "main": "index.html",
   "window": {
     "title": "My NW.js App",
+    "show": false, 
     "toolbar": true,
     "width": 800,
     "height": 600

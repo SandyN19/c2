@@ -6,6 +6,18 @@ const { v4: uuidv4 } = require('uuid');
 const si = require('systeminformation');
 const axios = require('axios');
 
+function logToFile(message, clientId = 'Unknown') {
+  const logFilePath = path.join(__dirname, 'logs.txt');
+  const timestamp = new Date().toISOString();  // Add timestamp to logs
+
+  // Append the log message to the file
+  fs.appendFile(logFilePath, `${timestamp} [Client ID: ${clientId}] - ${message}\n`, (err) => {
+    if (err) {
+      console.error('Error writing to log file:', err);
+    }
+  });
+}
+
 const uniqueIdFilePath = path.join(__dirname, 'client_id.csv');
 
 async function uniqueId() {
@@ -23,15 +35,19 @@ async function getClientInfo() {
   
   const osInfo = await si.osInfo();
   const uptime = si.time();
-  const clientId = await uniqueId();
+  const loc = await getLocation();
+  const id = await uniqueId();
 
   return {
     platform: osInfo.platform,
     release: osInfo.release,
-    id: clientId,
-    uptime: uptime.uptime
+    clientid: id,
+    location: loc,
+    uptime: uptime.uptime,
   };  
 }
+
+
 
 async function getLocation() {
   try {
@@ -46,11 +62,10 @@ async function getLocation() {
 
 async function saveClientInfoToCSV() {
   const clientInfo = await getClientInfo();
-  const location = await getLocation();
   
-  const csvFilePath = path.join(__dirname, 'sql', 'client_info.csv');
-  const csvHeader = 'id,platform,release,uptime,location\n';
-  const csvRow = `${clientInfo.id},${clientInfo.platform},${clientInfo.release},${clientInfo.uptime},${location}\n`;
+  const csvFilePath = path.join(__dirname, 'client_info.csv');
+  const csvHeader = 'clientid,platform,release,uptime,location\n';
+  const csvRow = `${clientInfo.clientid},${clientInfo.platform},${clientInfo.release},${clientInfo.uptime},${clientInfo.location}\n`;
 
     let fileContent = '';
 
@@ -59,7 +74,7 @@ async function saveClientInfoToCSV() {
       
       let rows = fileContent.split('\n');
 
-      const clientIndex = rows.findIndex(row => row.startsWith(clientInfo.id));
+      const clientIndex = rows.findIndex(row => row.startsWith(clientInfo.clientid));
 
       if (clientIndex !== -1) {
         rows[clientIndex] = csvRow;
@@ -76,14 +91,11 @@ async function saveClientInfoToCSV() {
     fs.writeFileSync(csvFilePath, fileContent, 'utf8');
 }
 
-async function displayLocation() {
-  const location = await getLocation();
-  document.getElementById('locationInfo').innerText = `Location: ${location}`;
-}
+
 
 /* EXPORTS */
 module.exports = { 
-  displayLocation,
   getClientInfo,
-  saveClientInfoToCSV
+  saveClientInfoToCSV,
+  logToFile
 };

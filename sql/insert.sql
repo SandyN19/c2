@@ -1,6 +1,6 @@
 
 
-LOAD DATA LOCAL INFILE 'client_info.csv'
+LOAD DATA LOCAL INFILE '../src/client_info.csv'
 INTO TABLE client
 CHARSET utf8
 FIELDS
