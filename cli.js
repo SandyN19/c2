@@ -2,6 +2,9 @@
 "use strict";
 
 const c2 = require("./src/cli.js");
+const functions = require("./src/c2.js");
+
+const isAdmin = process.getuid && process.getuid() === 0;
 
 // Read from commandline
 const readline = require("readline");
@@ -38,9 +41,16 @@ function menu() {
     help, menu - to show this menu.
     about - Names of the group.
     display - Display the list of clients.
-    add / remove <clientID>- add or remove clinet form watchlist.
+    request - sends a request to be readded to watchlist.
     `);
+    if (isAdmin) {
+        console.log(`Admin-only commands:
+        add <clientID> - Add a client to the watchlist.
+        remove <clientID> - Remove a client from the watchlist.
+        pending - display pending list.`);
+    }
 }
+
 
 
 /**
@@ -66,13 +76,11 @@ function exitProgram(code) {
  *
  * @returns {void}
  */
-function handleInput(line) {
+async function handleInput(line) {
     line = line.trim();
     const parts = line.split(' ');
     const part1 = parts[0];
     const part2 = parts.length > 1 ? parts[1] : null;
-    const part3 = parts.length > 2 ? parts[2] : null;
-    const part4 = parts.length > 3 ? parts[3] : null;
 
     switch (part1) {
         case "quit":
@@ -87,13 +95,30 @@ function handleInput(line) {
             console.log("By: Sandy Nguyen, Sang22");
             break;
         case "display":
-            c2.displayList();
+            if (isAdmin) {
+            c2.displayList(); }
+            else {
+            c2.displayListClient( await functions.getClientInfo())
+            }
             break;
         case "add":
-            c2.changeWatchlist(part2, true);
+            if (isAdmin) {
+                c2.changeWatchlist(part2, true);
+                c2.removeFromPendingList(part2)
+            }
             break;
         case "remove":
-            c2.changeWatchlist(part2, false);
+            if (isAdmin) {
+                c2.changeWatchlist(part2, false); 
+            }
+            break;
+        case "pending":
+            if (isAdmin) {
+                c2.displayPendingList();
+            }
+            break;
+        case "request":
+                c2.addToPendingList( await functions.getClientInfo());
             break;
         default:
             menu();

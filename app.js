@@ -8,21 +8,16 @@ const app     = express();
 const routeIndex = require("./route/index.js");
 const middleware = require("./middleware/index.js");
 
-// Add JSON parsing middleware before routes
 app.use(express.json());
 
-// Enable CORS
 app.use(cors());
 
 app.set("view engine", "ejs");
 
-// Middleware for logging incoming requests
 app.use(middleware.logIncomingToConsole);
 
-// Serve static resources
 app.use(express.static(path.join(__dirname, "public")));
 
-// Route handling
 app.use("/", routeIndex);
 
 app.listen(port, logStartUpDetailsToConsole);
