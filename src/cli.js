@@ -176,20 +176,31 @@ async function checkWatchlist(clientInfo) {
 
 async function addToPendingList(clientInfo) {
   const { clientid, platform, release, location } = clientInfo;
-  let sql = `
-  INSERT INTO pending_clients (clientid, name, version, location)
-  VALUES (?, ?, ?, ?)
-  ON DUPLICATE KEY UPDATE
-    name = VALUES(name),
-    version = VALUES(version),
-    location = VALUES(location)
-  `;
-  let res;
 
-  res = await db.query(sql, [clientid, platform, release, location]);
-  logToClientFile(`Added client to pending list: ${clientid}`)
-  return res[0];
+  let watchlistCheckSql = `SELECT watchlist FROM client WHERE clientid = ?`;
+  let watchlistRes = await db.query(watchlistCheckSql, [clientid]);
+
+  if (watchlistRes[0] && watchlistRes[0].watchlist === 0) {
+    let sql = `
+      INSERT INTO pending_clients (clientid, name, version, location)
+      VALUES (?, ?, ?, ?)
+      ON DUPLICATE KEY UPDATE
+        name = VALUES(name),
+        version = VALUES(version),
+        location = VALUES(location)
+    `;
+    
+    let res = await db.query(sql, [clientid, platform, release, location]);
+    logToClientFile(`Added client to pending list: ${clientid}`);
+    console.log("You've been added to the waiting list.")
+    return res[0];
+  } else {
+    logToClientFile(`Client ${clientid} is already on the watchlist, not added to pending list.`);
+    console.log("You're already on the watchlist.")
+    return null;
+  }
 }
+
 
 
 async function displayPendingList() {
