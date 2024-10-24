@@ -6,9 +6,6 @@ const fs = require('fs').promises;
 const path = require('path');
 const c2 = require('./c2');
 
-
-const multer = require("multer");
-
 let db;
 
 

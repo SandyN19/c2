@@ -130,7 +130,7 @@ router.post('/upload', upload.single('file'), (req, res) => {
 
     console.log('File uploaded:', req.file);
     res.json({ message: 'File uploaded successfully', file: req.file });
-    c2.logToFile(`${req.file.originalname} uploaded to client: ${req.body.clientid}`, "admin")
+    c2.logToFile(`${req.file.originalname} uploaded`, "admin")
     cli.logToClientFile(`Admin uploaded: ${req.file.originalname}`, )
 });
 

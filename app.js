@@ -28,13 +28,10 @@ app.listen(port, logStartUpDetailsToConsole);
 function logStartUpDetailsToConsole() {
    let routes = [];
 
-   // Find what routes are supported
    app._router.stack.forEach((middleware) => {
        if (middleware.route) {
-           // Routes registered directly on the app
            routes.push(middleware.route);
        } else if (middleware.name === "router") {
-           // Routes added as router middleware
            middleware.handle.stack.forEach((handler) => {
                let route;
 
