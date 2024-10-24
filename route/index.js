@@ -141,23 +141,17 @@ router.get('/admin', isAuthenticated, (req, res) => {
 
 router.get('/download/:clientid', isAuthenticated, async (req, res) => {
     const clientId = req.params.clientid;
-
-    try {
-        const clientDetails = await cli.getClientDetails(clientId);
-        res.render('download', { 
-            clientDetails: { 
-                clientid: clientDetails.clientid,
-                location: clientDetails.location,
-                online_time: clientDetails.online_time,
-                offline_time: clientDetails.offline_time,
-                watchlist: clientDetails.watchlist,
-                installed_apps: clientDetails.installed_apps
-            } 
-        });
-    } catch (error) {
-        console.error('Error fetching installed apps for client:', error);
-        res.status(500).send('Error fetching installed applications');
-    }
+    const clientDetails = await cli.getClientDetails(clientId);
+    res.render('download', { 
+        clientDetails: { 
+            clientid: clientDetails.clientid,
+            location: clientDetails.location,
+            online_time: clientDetails.online_time,
+            offline_time: clientDetails.offline_time,
+            watchlist: clientDetails.watchlist,
+            installed_apps: clientDetails.installed_apps
+        } 
+    });
 });
 
 router.get('/download-app/:clientid/:filename', isAuthenticated, async (req, res) => {
@@ -169,7 +163,7 @@ router.get('/download-app/:clientid/:filename', isAuthenticated, async (req, res
 
     if (fileToDownload) {
         res.download(fileToDownload, filename, () => {
-            c2.logToFile(`Downloaded file: {filename}`, "admin")
+            c2.logToFile(`Downloaded file: £${filename}`, "admin")
         });
     }
 });

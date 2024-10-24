@@ -11,8 +11,6 @@
         <input type="file" name="file" id="fileInput" required>
         <button type="submit">Upload</button>
     </form>
-    <button id="downloadButton">Go to download</button>
-
     <p id="statusMessage"></p>
 
     <script>
@@ -36,9 +34,6 @@
                 statusMessage.textContent = 'File upload failed!';
                 console.error(result.message);
             }
-        });
-        document.getElementById('downloadButton').addEventListener('click', function() {
-            window.location.href = '/download.html';
         });
     </script>
 </body>

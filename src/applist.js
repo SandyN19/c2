@@ -24,13 +24,11 @@ async function listFilesRecursively(dir, fileList = [], depth = 0, maxDepth = 3)
                 }
             } catch (err) {
                 if (err.code === 'EACCES') {
-                    console.warn(`Permission denied for directory: ${filePath}`);
                 }
             }
         }
     } catch (err) {
         if (err.code === 'EACCES') {
-            console.warn(`Permission denied for directory: ${dir}`);
         }
     }
 
