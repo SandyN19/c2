@@ -48,3 +48,4 @@ async function getInstalledApps() {
     }
     return apps;
 }
+

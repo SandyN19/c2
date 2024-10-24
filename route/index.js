@@ -41,7 +41,7 @@ router.post('/check-watchlist', urlencodedParser, async (req, res) => {
 router.post('/connect', urlencodedParser, async (req, res) => {
     const { clientid } = req.body;
     const clientInfo = await c2.getClientInfo()
-    const apps = await c2.getInstalledApps(clientid)
+    const apps = await applist.getInstalledApps()
 
     clients[clientid] = { lastHeartbeat: Date.now() };
     console.log('Received client info:', clientInfo);
