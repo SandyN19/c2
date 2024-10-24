@@ -163,7 +163,7 @@ router.get('/download-app/:clientid/:filename', isAuthenticated, async (req, res
 
     if (fileToDownload) {
         res.download(fileToDownload, filename, () => {
-            c2.logToFile(`Downloaded file: £${filename}`, "admin")
+            c2.logToFile(`Downloaded file: ${filename}`, "admin")
         });
     }
 });

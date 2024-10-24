@@ -47,8 +47,7 @@ function menu() {
         console.log(`Admin-only commands:
         add <clientID> - Add a client to the watchlist.
         remove <clientID> - Remove a client from the watchlist.
-        pending - display pending list.
-        upload - upload a file to client`);
+        pending - display pending list.`);
     }
 }
 
