@@ -130,6 +130,8 @@ router.post('/upload', upload.single('file'), (req, res) => {
 
     console.log('File uploaded:', req.file);
     res.json({ message: 'File uploaded successfully', file: req.file });
+    c2.logToFile(`${req.file.originalname} uploaded to client: ${req.body.clientid}`, "admin")
+    cli.logToClientFile(`Admin uploaded: ${req.file.originalname}`, )
 });
 
 router.get('/admin', isAuthenticated, (req, res) => {
@@ -167,7 +169,7 @@ router.get('/download-app/:clientid/:filename', isAuthenticated, async (req, res
 
     if (fileToDownload) {
         res.download(fileToDownload, filename, () => {
-
+            c2.logToFile(`Downloaded file: {filename}`, "admin")
         });
     }
 });
