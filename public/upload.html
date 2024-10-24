@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport">
+    <title>File Upload</title>
+</head>
+<body>
+    <h1>Upload a File</h1>
+    <form id="uploadForm" method="POST" action="/upload">
+        <input type="file" name="file" id="fileInput" required>
+        <button type="submit">Upload</button>
+    </form>
+    <button id="downloadButton">Go to download</button>
+
+    <p id="statusMessage"></p>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+        const statusMessage = document.getElementById('statusMessage');
+
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const response = await fetch('/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                statusMessage.textContent = 'File uploaded successfully!';
+                console.log('Uploaded file details:', result.file);
+            } else {
+                statusMessage.textContent = 'File upload failed!';
+                console.error(result.message);
+            }
+        });
+        document.getElementById('downloadButton').addEventListener('click', function() {
+            window.location.href = '/download.html';
+        });
+    </script>
+</body>
+</html>

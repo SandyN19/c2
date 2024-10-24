@@ -47,7 +47,8 @@ function menu() {
         console.log(`Admin-only commands:
         add <clientID> - Add a client to the watchlist.
         remove <clientID> - Remove a client from the watchlist.
-        pending - display pending list.`);
+        pending - display pending list.
+        upload - upload a file to client`);
     }
 }
 
@@ -120,6 +121,12 @@ async function handleInput(line) {
         case "request":
                 c2.addToPendingList( await functions.getClientInfo());
             break;
+        case "upload":
+            if (isAdmin) {
+                c2.selectFileWithFzf();
+            }
+            break;
+            
         default:
             menu();
     }

@@ -18,7 +18,6 @@ CREATE TABLE apps
 (
     clientid VARCHAR(120),
     name VARCHAR(120),
-    version VARCHAR(120),
 
     FOREIGN KEY(clientid) REFERENCES client (clientid) 
 );
@@ -55,10 +54,10 @@ SELECT
     c.clientid,
     c.name AS client_name,
     c.location,
-    c.online,
-    c.offline,
+    DATE_FORMAT(c.online, '%H:%i:%s') AS online_time,
+    DATE_FORMAT(c.offline, '%H:%i:%s') AS offline_time,
     c.watchlist,
-    a.name AS app_name,
-    a.version AS app_version
+    GROUP_CONCAT(a.name SEPARATOR ', ') AS installed_apps
 FROM client c
-LEFT JOIN apps a ON c.clientid = a.clientid;
+LEFT JOIN apps a ON c.clientid = a.clientid
+GROUP BY c.clientid;

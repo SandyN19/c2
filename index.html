@@ -7,9 +7,7 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
   <body>
-    <h1>Welcome!</h1>
-    <p id="statusMessage"></p>
-
+    <p id="statusMessage" style="background-color: transparent;">Uploading device information...</p>
     <script>
       window.onload = async function() {
         const clientInfo = await getClientInfo();
@@ -18,13 +16,16 @@
 
           if (!watchlistResponse.data.onWatchlist) {
             document.getElementById('statusMessage').innerText = "You have been removed from the watchlist.";
+            document.getElementById('statusMessage').style.backgroundColor = "red";
           } else {
             await axios.post('http://localhost:1337/connect', { clientid: clientInfo.clientid });
             document.getElementById('statusMessage').innerText = "Connected successfully!";
+            document.getElementById('statusMessage').style.backgroundColor = "green";
             setInterval(sendHeartbeat, 5000);
           }
       } catch (error) {
           document.getElementById('statusMessage').innerText = "Server down. Please try again later.";
+          document.getElementById('statusMessage').style.backgroundColor = "red";
         }
       };
 

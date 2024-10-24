@@ -9,9 +9,7 @@
     "height": 200
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx nw .",
-    "cli": "node cli.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
@@ -24,8 +22,11 @@
   "chromium-args": "--mixed-context",
   "dependencies": {
     "axios": "^1.7.7",
-    "cors": "^2.8.5",
+    "ejs": "^3.1.10",
     "express": "^4.21.0",
+    "express-session": "^1.18.1",
+    "multer": "^1.4.5-lts.1",
+    "mysql": "^2.18.1",
     "mysql2": "^3.11.3",
     "promise-mysql": "^5.2.0",
     "systeminformation": "^5.23.5",

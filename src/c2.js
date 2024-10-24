@@ -5,7 +5,6 @@ const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 const si = require('systeminformation');
 const axios = require('axios');
-const { exec } = require('child_process');
 
 function logToFile(message, clientId = 'Unknown') {
   const logFilePath = path.join(__dirname, 'logs.txt');
@@ -20,7 +19,7 @@ function logToFile(message, clientId = 'Unknown') {
 
 
 async function uniqueId() {
-  const uniqueIdFilePath = path.join(__dirname, 'client_id.csv');
+  const uniqueIdFilePath = path.join(process.cwd(), 'src/client_id.csv');
   if (fs.existsSync(uniqueIdFilePath)) {
     const savedId = fs.readFileSync(uniqueIdFilePath, 'utf8');
     return savedId.trim();
@@ -36,12 +35,12 @@ async function getClientInfo() {
   const osInfo = await si.osInfo();
   const loc = await getLocation();
   const id = await uniqueId();
-
+  
   return {
     platform: osInfo.platform,
     release: osInfo.release,
     clientid: id,
-    location: loc,
+    location: loc
   };  
 }
 
@@ -65,6 +64,5 @@ async function getLocation() {
 /* EXPORTS */
 module.exports = { 
   getClientInfo,
-
   logToFile
 };

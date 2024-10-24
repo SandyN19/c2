@@ -3,14 +3,11 @@
 const port    = process.env.DBWEBB_PORT || 1337;
 const path    = require("path");
 const express = require("express");
-const cors    = require("cors");
 const app     = express();
 const routeIndex = require("./route/index.js");
 const middleware = require("./middleware/index.js");
 
 app.use(express.json());
-
-app.use(cors());
 
 app.set("view engine", "ejs");
 

