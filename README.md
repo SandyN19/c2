@@ -37,7 +37,7 @@ The server is run by `node app.js`
 
 #### client
 
-The client can be ran with `pm2 'npx nw .' --name client`
+The client can be run with `pm2 'npx nw .' --name client`
 
 Giving the client a name makes it possible to stop the client with `pm2 stop client` and also to restart it with `pm2 restart client`.
 
